@@ -38,4 +38,40 @@ To learn and implement a complete RTL-to-Gate-Level design flow from scratch usi
 
 **Ramya Sheshadri**  
 B.E. Electronics & Communication Engineering – BMSCE  
-Aspiring VLSI Design Engineer | RTL | STA | CMOS | Verilog | SystemVerilog | EDA Tools  
+Aspiring VLSI Design Engineer | RTL | STA | CMOS | Verilog | SystemVerilog | EDA Tools 
+
+# Session 1 — 2-input AND Gate RTL Design, Simulation & Waveform
+
+This session covers writing the RTL and testbench for a 2-input AND gate, simulating the design using Icarus Verilog, and viewing the waveform on GTKWave.
+
+```bash
+# 📁 Create working directory
+mkdir -p ~/sky130_workshop/session1
+cd ~/sky130_workshop/session1
+# 📝 Create RTL file
+nano design.v
+# 📝 Create Testbench
+nano tb.v
+# ⚙️ Compile design and testbench
+iverilog design.v tb.v -o sim.out
+# ▶️ Run the simulation
+vvp sim.out
+# 🖥️ GTKWave setup for WSL only (run only if using WSL)
+export DISPLAY=:0
+# 📈 View waveform
+gtkwave and_gate.vcd
+Inside GTKWave:
+
+Expand tb
+
+Double-click on a, b, y to add signals to waveform window
+
+Zoom in/out and observe transitions
+
+<img width="955" height="318" alt="GTK OP" src="https://github.com/user-attachments/assets/7f4e527b-328f-41da-b3ae-5661281cb3fb" />
+
+✅ DONE:
+- RTL and TB written
+- Simulated with Icarus Verilog
+- Waveform visualized via GTKWave
+
