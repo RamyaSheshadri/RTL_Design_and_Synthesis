@@ -45,33 +45,114 @@ Aspiring VLSI Design Engineer | RTL | STA | CMOS | Verilog | SystemVerilog | EDA
 This session covers writing the RTL and testbench for a 2-input AND gate, simulating the design using Icarus Verilog, and viewing the waveform on GTKWave.
 
 ```bash
-# 📁 Create working directory
+📁 Project Setup
+Create a working directory for the session:
+
+bash
+Copy
+Edit
 mkdir -p ~/sky130_workshop/session1
 cd ~/sky130_workshop/session1
-# 📝 Create RTL file
+📝 Create RTL File
+Open design.v in nano editor:
+
+bash
+Copy
+Edit
 nano design.v
-# 📝 Create Testbench
+Paste the following RTL code:
+
+verilog
+Copy
+Edit
+module and_gate(
+  input a, b,
+  output y
+);
+  assign y = a & b;
+endmodule
+Save and exit:
+
+Press Ctrl + O, then Enter to save
+
+Press Ctrl + X to exit
+
+📝 Create Testbench File
+bash
+Copy
+Edit
 nano tb.v
-# ⚙️ Compile design and testbench
+Paste the following testbench:
+
+verilog
+Copy
+Edit
+`timescale 1ns/1ps
+module tb;
+  reg a, b;
+  wire y;
+  and_gate uut (.a(a), .b(b), .y(y));
+
+  initial begin
+    $dumpfile("and_gate.vcd");
+    $dumpvars(0, tb);
+    
+    a = 0; b = 0; #10;
+    a = 1; b = 0; #10;
+    a = 0; b = 1; #10;
+    a = 1; b = 1; #10;
+    $finish;
+  end
+endmodule
+Save and exit with Ctrl + O, Enter, Ctrl + X.
+
+⚙️ Compile and Simulate
+Compile both design and testbench files:
+
+bash
+Copy
+Edit
 iverilog design.v tb.v -o sim.out
-# ▶️ Run the simulation
+Run the compiled simulation:
+
+bash
+Copy
+Edit
 vvp sim.out
-# 🖥️ GTKWave setup for WSL only (run only if using WSL)
+This will generate a file called and_gate.vcd.
+
+📈 Open GTKWave (for Waveform Visualization)
+If you're on WSL, ensure your X11 server (e.g., VcXsrv) is running.
+
+Export display (for WSL only):
+
+bash
+Copy
+Edit
 export DISPLAY=:0
-# 📈 View waveform
+Then open the waveform in GTKWave:
+
+bash
+Copy
+Edit
 gtkwave and_gate.vcd
 Inside GTKWave:
 
-Expand tb
+Navigate the left panel and double-click a, b, and y to load them into the waveform viewer.
 
-Double-click on a, b, y to add signals to waveform window
+Zoom and inspect signal transitions as needed.
 
-Zoom in/out and observe transitions
+✅ Status
+At this point:
+
+The Verilog RTL and testbench have been simulated
+
+Output waveform is successfully viewed
+
+Environment is fully functional
+
+
+GOVE THIS READ ME FORMAT
 
 <img width="955" height="318" alt="GTK OP" src="https://github.com/user-attachments/assets/7f4e527b-328f-41da-b3ae-5661281cb3fb" />
-
-✅ DONE:
-- RTL and TB written
-- Simulated with Icarus Verilog
-- Waveform visualized via GTKWave
 
