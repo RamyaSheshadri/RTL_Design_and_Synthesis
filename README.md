@@ -44,17 +44,15 @@ Aspiring VLSI Design Engineer | RTL | STA | CMOS | Verilog | SystemVerilog | EDA
 
 This session covers writing the RTL and testbench for a 2-input AND gate, simulating the design using Icarus Verilog, and viewing the waveform on GTKWave.
 
-```bash
-📁 Project Setup
-Create a working directory for the session:
 
-bash
-Copy
-Edit
-mkdir -p ~/sky130_workshop/session1
-cd ~/sky130_workshop/session1
-📝 Create RTL File
-Open design.v in nano editor:
+-Project Setup
+ -Create a working directory for the session:
+  -mkdir -p ~/sky130_workshop/session1
+  -cd ~/sky130_workshop/session1
+
+  
+-Create RTL File
+ -Open design.v in nano editor:
 
 bash
 Copy
