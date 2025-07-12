@@ -1,5 +1,5 @@
 # RTL_Design_and_Synthesis
-# RTL Design and Synthesis Workshop using SKY130 🚀
+# RTL Design and Synthesis using SKY130 🚀
 
 ## Overview
 
@@ -17,11 +17,11 @@ This project helps me **build practical VLSI design experience**, aligned with r
 ## Goal
 
 To learn and implement a complete RTL-to-Gate-Level design flow from scratch using:
-> 🖊️ Verilog → 🧪 Simulation → 🔧 Synthesis → 📐 (Optional) GDSII with OpenLane
+> Verilog →  Simulation →  Synthesis → (Optional) GDSII with OpenLane
 
 ---
 
-## 🧱 Tools Used
+## Tools Used
 
 | Tool        | Purpose                         |
 |-------------|---------------------------------|
