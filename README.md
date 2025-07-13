@@ -147,7 +147,7 @@ yosys
 - show
 
 
- **synth -top good_mux**
+ ## **synth -top good_mux**
 
 ### Inference from `stat` Output — Before ABC Mapping
 
@@ -162,12 +162,11 @@ yosys
 ---
 
 ### Summary:
+MUX design has successfully synthesized to one internal multiplexer (`$_MUX_`), but it's not yet mapped to any **actual SKY130 standard cell**. Run `abc` to replace `$_MUX_` with `sky130_fd_sc_hd__mux2_1` or equivalent.
 
-> MUX design has successfully synthesized to one internal multiplexer (`$_MUX_`), but it's not yet mapped to any **actual SKY130 standard cell**. Run `abc` to replace `$_MUX_` with `sky130_fd_sc_hd__mux2_1` or equivalent.
 
-```
-ABC RESULTS: sky130_fd_sc_hd__mux2_1 cells: 1
-```
+## ABC RESULTS: sky130_fd_sc_hd__mux2_1 cells: 1
+
 ### Inference from `stat` Output — **After ABC Mapping**
 
 * The design is now **technology-mapped** to the SKY130 cell library
@@ -214,7 +213,7 @@ ABC RESULTS: sky130_fd_sc_hd__mux2_1 cells: 1
 
 ### Final Summary:
 
-> Your 2:1 MUX RTL has been successfully synthesized and mapped to a single SKY130 mux2\_1 gate (`sky130_fd_sc_hd__mux2_1`), with buffers added at input/output ports. This structure is **valid for tapeout**, matches expected PDK cells, and is ready for STA or further physical design.
+> The 2:1 MUX RTL has been successfully synthesized and mapped to a single SKY130 mux2x1 gate (`sky130_fd_sc_hd__mux2_1`), with buffers added at input/output ports. This structure is **valid for tapeout**, matches expected PDK cells, and is ready for STA or further physical design.
 
 ---
 ### Summary:
