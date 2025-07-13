@@ -227,7 +227,7 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
      sky130_fd_sc_hd__mux2_1         1
 
 -  **Number of cells: 1**  
-       - The entire design is implemented using **a single standard cell**, making it extremely area-efficient and minimal in gate count.
+  - The entire design is implemented using **a single standard cell**, making it extremely area-efficient and minimal in gate count.
 
 - **Mapped Cell: `sky130_fd_sc_hd__mux2_1`**  
   - This is a native **2:1 multiplexer** from the SKY130 standard cell library.  
