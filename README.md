@@ -1,5 +1,4 @@
-# RTL_Design_and_Synthesis
-# RTL Design and Synthesis using SKY130 🚀
+# RTL Design and Synthesis using SKY130 
 
 ## Overview
 
