@@ -220,8 +220,9 @@ ABC RESULTS: sky130_fd_sc_hd__mux2_1 cells: 1
 ---
 ### Summary:
 
-> Your RTL multiplexer is now represented by a single **sky130\_fd\_sc\_hd\_\_mux2\_1** gate — a standard cell from the SKY130 library. This is a **fully optimized, technology-mapped** version of your design — exactly what gets used in real silicon.
+> RTL multiplexer is now represented by a single **sky130\_fd\_sc\_hd\_\_mux2\_1** gate — a standard cell from the SKY130 library.
+> This is a **fully optimized, technology-mapped** version of design — exactly what gets used in real silicon.
 
-Let me know if you want this included in your final **README Day 1 results section** 🔧💚 You’re documenting it like a rockstar engineer now!
+
 
  
