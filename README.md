@@ -213,7 +213,7 @@ MUX design has successfully synthesized to one internal multiplexer (`$_MUX_`), 
 
 After running the full Yosys synthesis flow with SKY130 technology mapping, the following statistics were obtained using the `stat` command:
 
-
+```txt
 === good_mux ===
 
    Number of wires:                  8
@@ -225,6 +225,7 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
    Number of processes:              0
    Number of cells:                  1
      sky130_fd_sc_hd__mux2_1         1
+```txt
 
 -  **Number of cells: 1**  
   - The entire design is implemented using **a single standard cell**, making it extremely area-efficient and minimal in gate count.
