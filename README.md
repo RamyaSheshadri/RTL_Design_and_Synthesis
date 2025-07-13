@@ -180,7 +180,44 @@ ABC RESULTS: sky130_fd_sc_hd__mux2_1 cells: 1
 * Ready for STA, power, area, and layout-level analysis
 
 ---
+<img width="308" height="227" alt="yosys op mux" src="https://github.com/user-attachments/assets/3708a371-ebe6-4e2e-b4c6-4e29dd2d8e4f" />
 
+## Inference from `.yosys_show.dot` Gate-Level Diagram
+### General Structure:
+* The diagram is generated after running:show in Yosys **after `abc` + `.lib` tech mapping**.
+---
+
+### Key Observations:
+
+* Inputs `a`, `b`, and `sel` are **connected via buffers (BUF)** — these are inserted by Yosys to match driving strength or syntax.
+* The core logic cell is:
+  ```
+  sky130_fd_sc_hd__mux2_1
+  ```
+  This is a **real physical MUX gate** from the SKY130 standard cell library.
+* Inputs:
+  * `A0` = `a`
+  * `A1` = `b`
+  * `S` = `sel` (select line)
+
+* Output:
+
+  * `X` = result from MUX → passed to another `BUF` → output `y`
+---
+
+### Design-Level Inference:
+
+* Your RTL 2:1 MUX is now **fully mapped to silicon-usable gate** — no inferred logic remains.
+* No internal logic (NANDs or INVs) needed — this is **area-optimized**, thanks to direct use of `mux2_1`.
+* Each input and output is passed through `BUF` gates to ensure signal integrity — this is typical in standard-cell synthesis.
+
+---
+
+### Final Summary:
+
+> Your 2:1 MUX RTL has been successfully synthesized and mapped to a single SKY130 mux2\_1 gate (`sky130_fd_sc_hd__mux2_1`), with buffers added at input/output ports. This structure is **valid for tapeout**, matches expected PDK cells, and is ready for STA or further physical design.
+
+---
 ### Summary:
 
 > Your RTL multiplexer is now represented by a single **sky130\_fd\_sc\_hd\_\_mux2\_1** gate — a standard cell from the SKY130 library. This is a **fully optimized, technology-mapped** version of your design — exactly what gets used in real silicon.
