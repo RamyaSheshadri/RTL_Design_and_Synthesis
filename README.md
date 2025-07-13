@@ -90,3 +90,101 @@ At this point:
 
 <img width="955" height="318" alt="GTK OP" src="https://github.com/user-attachments/assets/7f4e527b-328f-41da-b3ae-5661281cb3fb" />
 
+
+# 2:1 MUX: RTL Design, Simulation & Synthesis (SKY130)
+
+This demonstrates the complete RTL to gate-level flow for a 2:1 multiplexer using open-source tools and the SKY130 standard cell library.
+
+---
+
+## Tools Used
+
+| Tool       | Purpose                            |
+|------------|------------------------------------|
+| `iverilog` | Simulation of RTL design           |
+| `vvp`      | Executes compiled simulation       |
+| `gtkwave`  | Waveform visualization (`.vcd`)    |
+| `yosys`    | Logic synthesis & technology mapping|
+| `.lib`     | SKY130 Liberty file for cell info  |
+
+---
+
+## Files in this Lab
+
+| File                  | Purpose                         |
+|-----------------------|---------------------------------|
+| `good_mux.v`          | Verilog RTL for 2:1 MUX         |
+| `tb_good_mux.v`       | Verilog testbench               |
+| `dump.vcd`            | VCD file for waveform viewing   |
+| `mux_out`             | Compiled simulation binary      |
+| `mux_synth.v`         | Synthesized netlist (optional)  |
+| `sky130_fd_sc_hd__tt_025C_1v80.lib` | Liberty file      |
+
+---
+
+## Step-by-Step Procedure
+
+### 1. Write RTL and Testbench
+- `good_mux.v`:using command nano good_mux.v 
+- tb_good_mux.v:using command nano tb_good_mux.v
+- Ctrl+O to save, ENTER, Ctrl+X to exit
+
+### 2. Run simulation:
+- iverilog -o mux_out good_mux.v tb_good_mux.v
+- vvp mux_out
+- gtkwave dump.vcd &
+
+Observe a, b, sel, and y in GTKWave. 
+<img width="858" height="308" alt="mux op gtk" src="https://github.com/user-attachments/assets/32462b29-abad-48e7-a82c-e870a501e439" />
+
+### 3. Run synthesis in Yosys by:
+yosys
+**Then in yosys shell, type the following commands one by one**
+- read_liberty -lib sky130_fd_sc_hd__tt_025C_1v80.lib
+- read_verilog good_mux.v
+- synth -top good_mux
+- dfflibmap -liberty sky130_fd_sc_hd__tt_025C_1v80.lib
+- abc -liberty sky130_fd_sc_hd__tt_025C_1v80.lib
+- show
+
+
+ **synth -top good_mux**
+
+### Inference from `stat` Output — Before ABC Mapping
+
+* **Module name** is `good_mux` — your top-level design
+* **4 wires and 4 wire bits** → represent the signals `a`, `b`, `sel`, `y`
+* **No memories or processes** → confirms it's a purely combinational design (no FSMs or RAM)
+* **Number of cells: 1** → only one logic unit used internally
+* **`$_MUX_` is present** → this is a *generic inferred mux* from Yosys
+* Not yet mapped to real SKY130 cells — design is still in **intermediate netlist form**
+* Indicates you haven’t run `abc` (or `dfflibmap + abc`) yet to tech-map to real standard cells
+
+---
+
+### Summary:
+
+> MUX design has successfully synthesized to one internal multiplexer (`$_MUX_`), but it's not yet mapped to any **actual SKY130 standard cell**. Run `abc` to replace `$_MUX_` with `sky130_fd_sc_hd__mux2_1` or equivalent.
+
+```
+ABC RESULTS: sky130_fd_sc_hd__mux2_1 cells: 1
+```
+### Inference from `stat` Output — **After ABC Mapping**
+
+* The design is now **technology-mapped** to the SKY130 cell library
+* **`sky130_fd_sc_hd__mux2_1`** is the actual physical standard cell used
+* The previously inferred `$_MUX_` has been **replaced** with a real gate
+* This means your RTL was successfully synthesized to a **tapeout-valid cell**
+* Since only 1 cell was used, it's an **area-optimized** mapping — no redundant gates
+* All inputs/outputs are **connected directly to the mux2\_1 cell**
+* Ready for STA, power, area, and layout-level analysis
+
+---
+
+### Summary:
+
+> Your RTL multiplexer is now represented by a single **sky130\_fd\_sc\_hd\_\_mux2\_1** gate — a standard cell from the SKY130 library. This is a **fully optimized, technology-mapped** version of your design — exactly what gets used in real silicon.
+
+Let me know if you want this included in your final **README Day 1 results section** 🔧💚 You’re documenting it like a rockstar engineer now!
+
+ 
