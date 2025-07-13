@@ -213,7 +213,7 @@ MUX design has successfully synthesized to one internal multiplexer (`$_MUX_`), 
 
 After running the full Yosys synthesis flow with SKY130 technology mapping, the following statistics were obtained using the `stat` command:
 
-```txt
+
 === good_mux ===
 
    Number of wires:                  8
