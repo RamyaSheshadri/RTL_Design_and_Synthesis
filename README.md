@@ -225,32 +225,8 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
    Number of processes:              0
    Number of cells:                  1
      sky130_fd_sc_hd__mux2_1         1
-```txt
 
--  **Number of cells: 1**  
-  - The entire design is implemented using **a single standard cell**, making it extremely area-efficient and minimal in gate count.
 
-- **Mapped Cell: `sky130_fd_sc_hd__mux2_1`**  
-  - This is a native **2:1 multiplexer** from the SKY130 standard cell library.  
-  - The RTL was **perfectly matched** to this cell with no need for internal decomposition (e.g., into NAND, NOR, or INV gates).  
-  - Result: A **clean and optimal** technology-mapped netlist.
-
-- **8 wires / 8 wire bits**  
-  - Represents a combination of internal connections and buffering handled by Yosys during synthesis.  
-  - **Public wires: 4** → These are your actual RTL ports: `a`, `b`, `sel`, and `y`.
-
-- **No memories or processes present**  
-  - Confirms the design is **purely combinational** — no sequential elements, state machines, or RAM.  
-  - Ideal for lightweight logic blocks and for STA or physical design integration.
-
----
-
-### Takeaway
-
-> The synthesized netlist is highly optimized, mapped to a single SKY130 mux2x1 gate (`sky130_fd_sc_hd__mux2_1`), with buffers added at input/output ports. and ready for further analysis or layout.  
-> This confirms that the RTL design is clean, efficient, and silicon-valid for fabrication using open PDKs.
-
----
 
 
 
