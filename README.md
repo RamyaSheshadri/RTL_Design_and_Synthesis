@@ -304,7 +304,6 @@ cp vsdmixedsignalflow/LIB/sky130_fd_sc_hd__tt_025C_1v80.lib lib/
 
 
 <img width="797" height="278" alt="pin a " src="https://github.com/user-attachments/assets/4252dba7-bf15-4dc4-8bc9-2f4e56321584" />
-
 <img width="815" height="284" alt="pin b" src="https://github.com/user-attachments/assets/ae58ddd2-2954-477d-96d3-a78ef081dd30" />
 <img width="797" height="212" alt="pin y" src="https://github.com/user-attachments/assets/768f9e39-98ef-459d-a644-50970559ec61" />
 
@@ -324,4 +323,44 @@ cp vsdmixedsignalflow/LIB/sky130_fd_sc_hd__tt_025C_1v80.lib lib/
 
 ### An example is shown here:
 <img width="800" height="362" alt="OUTPUT" src="https://github.com/user-attachments/assets/a1930031-dc37-40f2-bf8e-42aead8eded5" />
+
+### Delay vs Slew vs Load — Interpretation
+
+The `values()` matrix inside `cell_fall`, `cell_rise`, `fall_transition`, and `rise_transition` corresponds to:
+- **X-axis (`index_1`)** = Input transition time (slew)
+- **Y-axis (`index_2`)** = Output load capacitance
+
+From the matrix, we extracted the delay at:
+- **Input Slew = 0.01 ns**
+- **Output Load = 0.0005 pF**
+
+This maps to the **[0][0]** entry of the matrix.
+
+We picked:
+- `cell_fall` (A ↑ → Y ↓ delay)
+- `fall_transition` (Slew of output Y for A ↑)
+
+Both values decrease with lower load and faster input transitions (lower slew).
+
+### What is `timing_sense`?
+
+`timing_sense` tells us how the output behaves based on input transitions.
+
+- `"positive_unate"` → Output follows input transition (e.g., A ↑ → Y ↑)
+- `"negative_unate"` → Output inverts input transition (e.g., A ↑ → Y ↓)
+- `"non_unate"`       → Output transition can’t be predicted (data-dependent)
+
+Here, both A → Y and B → Y have `timing_sense : "negative_unate"`  
+As expected — a NAND gate inverts input transition.
+
+### Why is NAND2 output Y `negative_unate` w.r.t A or B?
+
+A NAND gate outputs:
+> Y = !(A & B)
+
+- If A goes from 0 to 1 (↑), and B = 1, then:
+  - A ↑ → A & B ↑ → Y goes from 1 → 0 (↓)
+- This means: **Input A ↑ causes Output Y ↓**
+
+Hence, the behavior is **inverting** → `negative_unate`
 
