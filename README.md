@@ -253,29 +253,26 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
 > This confirms that the RTL design is clean, efficient, and silicon-valid for fabrication using open PDKs.
 
 
-# 📘 Day 2 — Liberty File Exploration: Timing Delay Extraction
+# Day 2 — Liberty File Exploration: Timing Delay Extraction
+ 
+**Goal**: Understand `.lib` files and extract accurate cell delay and slew values from standard cells  
+**Cell Analyzed**: `sky130_fd_sc_hd__nand2_1`  
+**Library Used**: `sky130_fd_sc_hd__tt_025C_1v80.lib`  
+**Corner**: TT (Typical-Typical), 25°C, 1.8V  
 
-📅 **Workshop**: RTL Design and Synthesis using SKY130  
-🎯 **Goal**: Understand `.lib` files and extract accurate cell delay and slew values from standard cells  
-📁 **Cell Analyzed**: `sky130_fd_sc_hd__nand2_1`  
-📄 **Library Used**: `sky130_fd_sc_hd__tt_025C_1v80.lib`  
-🌡️ **Corner**: TT (Typical-Typical), 25°C, 1.8V  
-
----
 
 ## ✅ Objectives Completed Today
 
-- ✅ Located and opened the correct Liberty (`.lib`) file  
-- ✅ Parsed cell information for NAND2 gate  
-- ✅ Extracted timing arcs for a chosen input-output transition  
-- ✅ Interpreted propagation delay and transition slew  
-- ✅ Connected `.lib` data with expected Verilog simulation behavior  
+- Located and opened the correct Liberty (`.lib`) file  
+- Parsed cell information for NAND2 gate  
+- Extracted timing arcs for a chosen input-output transition  
+- Interpreted propagation delay and transition slew  
+- Connected `.lib` data with expected Verilog simulation behavior  
 
----
 
 ## 🧰 Setup & Commands
 
-```bash
+
 # Clone repo containing liberty file
 git clone https://github.com/praharshapm/vsdmixedsignalflow.git
 
@@ -284,8 +281,29 @@ mkdir -p ~/RTL_Design_and_Synthesis_Workshop_Using_SKY130/lib
 cp vsdmixedsignalflow/LIB/sky130_fd_sc_hd__tt_025C_1v80.lib lib/
 
 # Open the file and search for the cell
-nano lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+- nano lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+- Ctrl + W
+- sky130_fd_sc_hd__nand2_1
+- You'll see: cell ("sky130_fd_sc_hd__nand2_1")
+
+<img width="797" height="278" alt="pin a " src="https://github.com/user-attachments/assets/4252dba7-bf15-4dc4-8bc9-2f4e56321584" />
+
+<img width="815" height="284" alt="pin b" src="https://github.com/user-attachments/assets/ae58ddd2-2954-477d-96d3-a78ef081dd30" />
+<img width="797" height="212" alt="pin y" src="https://github.com/user-attachments/assets/768f9e39-98ef-459d-a644-50970559ec61" />
 
 
+ Which exact value did we extract?
+Let’s assume:
 
- 
+Slew = 0.01 ns (10 ps)
+Load = 0.0005 pF (0.5 fF)
+
+So we’re looking at:
+index_1[0] = 0.0100000000
+index_2[0] = 0.0005000000
+
+This means:
+👉 We extract the [0][0] value from the matrix inside each values(...) block.
+
+<img width="800" height="362" alt="OUTPUT" src="https://github.com/user-attachments/assets/a1930031-dc37-40f2-bf8e-42aead8eded5" />
+
