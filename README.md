@@ -253,6 +253,38 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
 > This confirms that the RTL design is clean, efficient, and silicon-valid for fabrication using open PDKs.
 
 
+# 📘 Day 2 — Liberty File Exploration: Timing Delay Extraction
+
+📅 **Workshop**: RTL Design and Synthesis using SKY130  
+🎯 **Goal**: Understand `.lib` files and extract accurate cell delay and slew values from standard cells  
+📁 **Cell Analyzed**: `sky130_fd_sc_hd__nand2_1`  
+📄 **Library Used**: `sky130_fd_sc_hd__tt_025C_1v80.lib`  
+🌡️ **Corner**: TT (Typical-Typical), 25°C, 1.8V  
+
+---
+
+## ✅ Objectives Completed Today
+
+- ✅ Located and opened the correct Liberty (`.lib`) file  
+- ✅ Parsed cell information for NAND2 gate  
+- ✅ Extracted timing arcs for a chosen input-output transition  
+- ✅ Interpreted propagation delay and transition slew  
+- ✅ Connected `.lib` data with expected Verilog simulation behavior  
+
+---
+
+## 🧰 Setup & Commands
+
+```bash
+# Clone repo containing liberty file
+git clone https://github.com/praharshapm/vsdmixedsignalflow.git
+
+# Copy the liberty file to local workshop directory
+mkdir -p ~/RTL_Design_and_Synthesis_Workshop_Using_SKY130/lib
+cp vsdmixedsignalflow/LIB/sky130_fd_sc_hd__tt_025C_1v80.lib lib/
+
+# Open the file and search for the cell
+nano lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 
 
 
