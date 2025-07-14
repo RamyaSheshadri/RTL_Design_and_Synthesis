@@ -261,7 +261,7 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
 **Corner**: TT (Typical-Typical), 25°C, 1.8V  
 
 
-## ✅ Objectives Completed Today
+## Objectives Completed Today
 
 - Located and opened the correct Liberty (`.lib`) file  
 - Parsed cell information for NAND2 gate  
@@ -270,7 +270,7 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
 - Connected `.lib` data with expected Verilog simulation behavior  
 
 
-## 🧰 Setup & Commands
+## Setup & Commands
 
 
 # Clone repo containing liberty file
@@ -285,6 +285,23 @@ cp vsdmixedsignalflow/LIB/sky130_fd_sc_hd__tt_025C_1v80.lib lib/
 - Ctrl + W
 - sky130_fd_sc_hd__nand2_1
 - You'll see: cell ("sky130_fd_sc_hd__nand2_1")
+
+  ### Pins Involved
+
+| Pin | Type   | Role                          |
+|-----|--------|-------------------------------|
+| A   | Input  | Primary timing input          |
+| B   | Input  | Secondary input               |
+| Y   | Output | Primary timing output         |
+
+### Extracted Timing Parameters
+
+| Parameter         | Liberty Block     | Index (Slew, Load)     | Extracted Value | Description                      |
+|-------------------|------------------|-------------------------|------------------|---------------------------------|
+| Propagation Delay | `cell_fall`      | (0.01 ns, 0.0005 pF)    | 24.92 ps         | A ↑ → Y ↓ delay (neg_unate)     |
+| Output Slew       | `fall_transition`| (0.01 ns, 0.0005 pF)    | 14.38 ps         | Slew at Y for A ↑ → Y ↓         |
+
+
 
 <img width="797" height="278" alt="pin a " src="https://github.com/user-attachments/assets/4252dba7-bf15-4dc4-8bc9-2f4e56321584" />
 
