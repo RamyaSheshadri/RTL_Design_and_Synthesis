@@ -273,14 +273,14 @@ After running the full Yosys synthesis flow with SKY130 technology mapping, the 
 ## Setup & Commands
 
 
-# Clone repo containing liberty file
+#### Clone repo containing liberty file
 git clone https://github.com/praharshapm/vsdmixedsignalflow.git
 
-# Copy the liberty file to local workshop directory
+#### Copy the liberty file to local workshop directory
 mkdir -p ~/RTL_Design_and_Synthesis_Workshop_Using_SKY130/lib
 cp vsdmixedsignalflow/LIB/sky130_fd_sc_hd__tt_025C_1v80.lib lib/
 
-# Open the file and search for the cell
+#### Open the file and search for the cell
 - nano lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 - Ctrl + W
 - sky130_fd_sc_hd__nand2_1
@@ -309,18 +309,19 @@ cp vsdmixedsignalflow/LIB/sky130_fd_sc_hd__tt_025C_1v80.lib lib/
 <img width="797" height="212" alt="pin y" src="https://github.com/user-attachments/assets/768f9e39-98ef-459d-a644-50970559ec61" />
 
 
- Which exact value did we extract?
-Let’s assume:
+### Which exact value did we extract?
+**Let’s assume:**
 
-Slew = 0.01 ns (10 ps)
-Load = 0.0005 pF (0.5 fF)
+- Slew = 0.01 ns (10 ps)
+- Load = 0.0005 pF (0.5 fF)
 
-So we’re looking at:
-index_1[0] = 0.0100000000
-index_2[0] = 0.0005000000
+**So we’re looking at:**
+- index_1[0] = 0.0100000000
+- index_2[0] = 0.0005000000
 
-This means:
-👉 We extract the [0][0] value from the matrix inside each values(...) block.
+**This means:**
+- We extract the [0][0] value from the matrix inside each values(...) block.
 
+### An example is shown here:
 <img width="800" height="362" alt="OUTPUT" src="https://github.com/user-attachments/assets/a1930031-dc37-40f2-bf8e-42aead8eded5" />
 
