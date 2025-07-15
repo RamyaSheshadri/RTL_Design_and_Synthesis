@@ -419,3 +419,196 @@ Meaning:
 - There’s already built-in slack
 - Might still cause hold violation in fast paths
 
+
+
+
+<img width="959" height="314" alt="sync reset" src="https://github.com/user-attachments/assets/45f8d158-8c74-40a2-a3c6-05b92179e843" />
+
+
+
+
+
+<img width="710" height="309" alt="yosys dff" src="https://github.com/user-attachments/assets/44ec5217-6b18-4156-9e7c-682330bc81ed" />
+
+---
+
+## 💥 What Your Verilog Code Says (Sync Reset Version)
+
+```verilog
+always @(posedge clk) begin
+  if (rst)
+    q <= 0;
+  else
+    q <= d;
+end
+```
+
+You're saying:
+
+* "Hey DFF, at every **posedge clk**, do either:
+
+  * Set `q = 0` if `rst = 1`
+  * Or set `q = d` if `rst = 0`"
+
+So, **the DFF has no idea about reset unless we tell it what to do with D**.
+
+---
+
+## What Yosys Does
+
+There is **no special flip-flop** for sync reset in the liberty `.lib`.
+So Yosys **fakes it** like this:
+
+> **"Let me compute the value of D based on `rst` and `d`, and just give that to a plain flip-flop!"**
+
+That’s why it builds a logic gate to mimic:
+
+```verilog
+assign D_in = (rst) ? 0 : d;
+```
+
+And how do we implement this `D_in = (rst) ? 0 : d` in hardware?
+
+> Using a **2-input NOR2B gate**, with:
+>
+> * `A = rst`
+> * `B_N = d` (inverted inside the cell)
+
+That cell:
+
+```text
+sky130_fd_sc_hd__nor2b_1
+```
+
+means:
+
+* **Input A** is normal
+* **Input B\_N** is *already inverted*
+* It does: `Y = ~(A + ~B)`
+
+Now plug in your signals:
+
+| Pin  | Signal |
+| ---- | ------ |
+| A    | rst    |
+| B\_N | d      |
+
+Then output becomes:
+
+```
+Y = ~(rst + ~d)
+```
+
+- When **`rst = 1`**, then `Y = 0` ⟶ This becomes the D input to the flip-flop ⇒ Reset behavior achieved.
+- When **`rst = 0`**, then `Y = d` ⟶ The DFF gets the actual data input ⇒ Normal DFF operation.
+
+**So this logic emulates the `if (rst) q <= 0; else q <= d;` behavior!**
+
+---
+
+## TL;DR: WHY NOR2B?
+
+**Because we don’t have a flip-flop that supports synchronous reset directly in the library.**
+
+- So, we build the reset logic externally — combine `rst` and `d` into a single input to the DFF.
+
+- The NOR2B cell **performs exactly the same logic as your Verilog conditional statement** — in real gates.
+
+---
+<img width="959" height="292" alt="async " src="https://github.com/user-attachments/assets/1cec760a-57a1-4d39-9706-d06d4362e1f5" />
+
+
+
+<img width="710" height="318" alt="yosys async" src="https://github.com/user-attachments/assets/b304a83b-edd4-496b-83b7-3adb8b77cc5f" />
+
+
+
+---
+
+### 🧠 What Your Async Verilog Code Says:
+
+```verilog
+module dff_async (
+  input clk,
+  input rst,
+  input d,
+  output reg q
+);
+  always @(posedge clk or posedge rst)
+    if (rst)
+      q <= 0;
+    else
+      q <= d;
+endmodule
+```
+
+Translation:
+
+> **"Hey flip-flop! The moment either `clk ↑` OR `rst ↑` happens, react instantly."**
+
+That’s **asynchronous reset** — **`rst` bypasses the clock**.
+
+---
+
+### 🔧 Now, What Yosys Did with Std Cells (In Your Dot Image):
+
+#### 🧱 Cell 1: `sky130_fd_sc_hd__dfrtp_1`
+
+This is a **D flip-flop with async reset**. Let’s look at its ports:
+
+| Port      | Meaning                 |
+| --------- | ----------------------- |
+| `CLK`     | Clock input             |
+| `D`       | Data input              |
+| `Q`       | Output                  |
+| `RESET_B` | **Active-LOW Reset** 😲 |
+
+So this FF resets when **RESET\_B = 0**
+
+But in your Verilog, `rst = 1` means reset!
+
+So... how do we fix that?
+
+#### 🧱 Cell 2: `sky130_fd_sc_hd__clkinv_1`
+
+This is an **inverter** — it simply takes `rst` and **inverts it**.
+So:
+
+```
+RESET_B = ~rst
+```
+
+This matches the **active-low reset** requirement of the FF cell.
+
+---
+
+### 🚀 Final Flow in Diagram:
+
+1. 🔌 `rst` goes into `sky130_fd_sc_hd__clkinv_1`
+2. 🧠 That produces `~rst`, sent to `RESET_B` of the flip-flop
+3. ✅ Now, flip-flop resets when `rst = 1`, just like your Verilog
+4. 🧠 `d`, `clk`, and `q` go directly to the FF
+
+---
+
+### 💡 Why This Design Is So Clean?
+
+* ✅ No gates needed to fake reset logic
+* ✅ `sky130_fd_sc_hd__dfrtp_1` directly supports async reset
+* ✅ Just need an inverter to match active-low format
+
+---
+
+### 🔥 Side-by-Side Summary: Sync vs Async
+
+| Feature             | Sync Version                                          | Async Version                                           |
+| ------------------- | ----------------------------------------------------- | ------------------------------------------------------- |
+| Reset Handling      | Done using NOR logic before DFF                       | Done **inside** DFF cell (via RESET\_B pin)             |
+| Flip-Flop Cell Used | `sky130_fd_sc_hd__dfxtp_1` (no reset support)         | `sky130_fd_sc_hd__dfrtp_1` (async reset supported)      |
+| Extra Cell Used     | `sky130_fd_sc_hd__nor2b_1` (for logic muxing)         | `sky130_fd_sc_hd__clkinv_1` (just to invert active-low) |
+| Reset Trigger       | Acts **only on clock edge**                           | Acts **immediately**, even without a clock edge         |
+| Logic Complexity    | Higher — reset logic has to be synthesized externally | Lower — handled by dedicated pin inside FF              |
+
+---
+
+Let me know if you want a compiled `.md` or `.png` comparison doc 📄⚔️
