@@ -533,7 +533,6 @@ Y = ~(rst + ~d)
 **Because we don’t have a flip-flop that supports synchronous reset directly in the library.**
 - So, we build the reset logic externally — combine `rst` and `d` into a single input to the DFF.
 - The NOR2B cell **performs exactly the same logic as your Verilog conditional statement** — in real gates.
-
 ---
 
 ## Asynchronous FF
@@ -609,6 +608,9 @@ This matches the **active-low reset** requirement of the FF cell.
 3. Now, flip-flop resets when `rst = 1`, just like your Verilog
 4. `d`, `clk`, and `q` go directly to the FF
 
+- $83 is just an internal net created during synthesis.
+- It connects internal logic (like NOR) to standard cell pins.
+- It’s safe to treat it as a “hidden wire” that routes control logic inside the synthesized netlist.
 ---
 
 ###  Why This Design Is So Clean?
