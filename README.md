@@ -364,3 +364,38 @@ A NAND gate outputs:
 
 Hence, the behavior is **inverting** → `negative_unate`
 
+# Liberty File Exploration: Setup and Hold Time Extraction
+
+This session involved **manual parsing** of a standard cell liberty file —  
+specifically `sky130_fd_sc_hd__tt_025C_1v80.lib` — to extract **setup** and **hold** timing constraints for the flip-flop cell `sky130_fd_sc_hd__dfxtp_1`.
+
+
+## 🔍 What Was Extracted?
+
+We focused on **timing arcs** for the output pin `"Q"`:
+- **Setup Time (`setup_rising`)**
+- **Hold Time (`hold_rising`)**
+
+These timing arcs define when input `"D"` must be stable **before** and **after** the rising edge of the clock `"CLK"`.
+
+
+## Structure Observed in Liberty
+
+```liberty
+timing_type : "setup_rising";
+related_pin : "CLK";
+rise_constraint ("vio_3_3_1") {
+  index_1("...")     --> Data transition time (D)
+  index_2("...")     --> CLK transition time
+  values("...")      --> Setup time values in ns
+}
+
+timing_type : "hold_rising";
+related_pin : "CLK";
+rise_constraint ("vio_3_3_1") {
+  index_1("...")     --> Data transition time
+  index_2("...")     --> CLK transition time
+  values("...")      --> Hold time values in ns
+}
+
+
