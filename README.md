@@ -397,5 +397,24 @@ rise_constraint ("vio_3_3_1") {
   index_2("...")     --> CLK transition time
   values("...")      --> Hold time values in ns
 }
+```
 
+<img width="452" height="449" alt="aa" src="https://github.com/user-attachments/assets/593ee50f-430a-45a5-9f25-9db38dc7f47a" />
+
+**Interpreting a Value:**
+- Let’s pick:
+  - Data transition = 0.5 ns
+  - Clock transition = 0.5 ns
+  - Setup time = 0.152 ns (2nd row, 2nd Column intersection of the matrix)
+
+Meaning:Data must be stable at least 0.152 ns before rising edge of CLK.
+
+**Interpreting a Value: Hold time**
+- If D = 0.5 ns, CLK = 0.5 ns → Hold = -0.115 ns
+Meaning:
+- Data must be stable at least 0.115 ns after rising CLK edge.
+
+**Negative hold time implies:**
+- There’s already built-in slack
+- Might still cause hold violation in fast paths
 
