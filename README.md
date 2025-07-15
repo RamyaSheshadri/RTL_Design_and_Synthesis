@@ -3,7 +3,7 @@
 ## Overview
 
 This repository documents my journey through the **RTL Design & Synthesis Workshop using SKY130**, based on the open-source flow by [Prachurjya Ghy](https://github.com/prachurjyaghy/RTL_Design_and_Synthesis_Workshop_Using_SKY130).  I have extended it with my own documentation, notes, and experiments.It covers the **complete front-end ASIC design flow** using open-source tools like:
-
+ 
 - **Icarus Verilog** – RTL simulation
 - **GTKWave** – Waveform analysis and debugging
 - **Yosys** – RTL synthesis
