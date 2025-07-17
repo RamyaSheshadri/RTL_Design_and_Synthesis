@@ -791,3 +791,61 @@ Let me know if you want the next step — comparing area/delay using `.lib`, or 
 ---
 
 
+---
+
+## Comparing Raw vs Simplified .dot Diagrams in Yosys
+
+###  1. **Shows Yosys Optimization Power**
+
+* The **initial DOT diagram** contains:
+
+  * Direct expression trees from the RTL
+  * Redundant gates or intermediate wires
+ 
+  ## Mult2:
+ <img width="559" height="318" alt="mult2 yosys" src="https://github.com/user-attachments/assets/26a73bc2-8a11-43ac-a01d-4589b56de469" />
+
+## Mult8:
+<img width="645" height="385" alt="mult 8 yosys dot" src="https://github.com/user-attachments/assets/74b20a08-23c3-4b35-9c74-05baa613aa2e" />
+
+* The **simplified version** (after `opt`, `proc`, `clean`) shows:
+
+  * Flattened logic
+  * Reduced gate count
+  * Only essential cells & wires
+
+## Mult2 simplified version:
+ 
+  <img width="418" height="295" alt="yosys mult2 simplified" src="https://github.com/user-attachments/assets/ba9cfeec-5e8d-4ed2-950b-cbb398428cd7" />
+
+
+## Mult8 simplified version:
+<img width="554" height="373" alt="yosys mult8 simplified" src="https://github.com/user-attachments/assets/0527b0bd-116e-4c9e-b85d-9af6200a7444" />
+
+Helps you **visually see the impact of synthesis optimizations**.
+
+---
+
+### 2. **Explains Synthesis Flow Stages**
+
+
+| Stage       | Command                                  | Effect                                         |
+| ----------- | ---------------------------------------- | ---------------------------------------------- |
+| Raw diagram | `read_verilog`, `hierarchy -top`, `show` | Shows full RTL as-is                           |
+| Simplified  | `proc; opt; opt_clean; show`             | Reduced to primitives like `$mul`, `$add`, etc |
+
+---
+
+###  "What does synthesis actually do?"
+ Yosys eliminated intermediate logic and directly used `$mul` cells for multiplication logic.
+
+---
+
+###  4. **Highlights Design Complexity**
+
+A good contrast for:
+
+* `mult2` vs `mult8`
+* Or before vs after optimization
+
+
