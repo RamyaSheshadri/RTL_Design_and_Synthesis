@@ -666,3 +666,49 @@ write_verilog synth/mult2_syn.v
 ## Similarly for 8-bit multiplier:
 
 <img width="959" height="286" alt="mult8 op" src="https://github.com/user-attachments/assets/5f118f75-4424-4526-a989-a672ca2a2122" />
+
+## 📊 Yosys Synthesis Report Summary
+
+Below is a synthesized summary of the resource usage for the `mult2` (2-bit × 2-bit) and `mult8` (8-bit × 8-bit) unsigned multipliers.
+
+| Metric                   | mult2        | mult8        |
+|--------------------------|--------------|--------------|
+|  Number of wires        | 3            | 3            |
+|  Number of wire bits    | 8            | 32           |
+|  Public wires           | 3            | 3            |
+|  Public wire bits       | 8            | 32           |
+|  Number of memories     | 0            | 0            |
+| Number of memory bits  | 0            | 0            |
+|  Number of processes    | 0            | 0            |
+|  Number of cells        | 1            | 1            |
+|   └── `$mul` (Multiplier) | 1            | 1            |
+
+---
+
+###  Explanation of Key Metrics
+
+| Term | Meaning |
+|------|---------|
+| **Wires** | These are named connections in the design (like `a`, `b`, `out`) used to carry signals. |
+| **Wire bits** | Total individual signal bits. `a[1:0]` counts as 2 bits. |
+| **Public Wires** | Wires that are exposed at the module level (inputs/outputs). |
+| **Public Wire Bits** | Total bits in all input/output ports. |
+| **Memories** | No memories (like arrays or RAMs) are used in either design. |
+| **Processes** | No behavioral blocks (`always`, etc.) are used in this structural RTL. |
+| **Cells** | Basic building blocks used in synthesized hardware (like gates or operators). |
+| **$mul** | Represents a multiplication cell instantiated by Yosys for `*` operator. |
+
+---
+
+### Observations
+
+-  Both designs use exactly **1 multiplier cell** (`$mul`), proving that `*` was inferred as a built-in multiplication operator.
+-  The number of **wire bits scales with bit-width**:
+  - `mult2`: 2-bit inputs produce 4-bit output ⇒ 2 + 2 + 4 = **8 bits**
+  - `mult8`: 8-bit inputs produce 16-bit output ⇒ 8 + 8 + 16 = **32 bits**
+-  No memory or sequential logic involved — pure combinational multiplication.
+-  Synthesis flow is **consistent** and scalable as bit-width increases.
+
+---
+
+
