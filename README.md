@@ -633,4 +633,36 @@ This matches the **active-low reset** requirement of the FF cell.
 
 ---
 
+# Session 3 — Multiplier RTL Design and Synthesis (mult2 & mult8)
 
+- This session focuses on the design, simulation, and synthesis of 2-bit and 8-bit unsigned multipliers using Verilog, GTKWave for waveform viewing, and Yosys for synthesis.
+
+---
+
+##  `mult2` — 2-bit Unsigned Multiplier
+
+### ✅ Design File: 
+<img width="953" height="287" alt="mult2 op" src="https://github.com/user-attachments/assets/b6fabb2c-5212-4e2b-99ee-2408e7c29c21" />
+
+- Implements a simple 2-bit × 2-bit multiplier
+- Output width = 4 bits (`2N`)
+
+### Simulation Instructions
+
+```bash
+# Compile and simulate
+iverilog -o mult2_out mult2.v mult2_tb.v
+vvp mult2_out
+```
+# View waveform
+gtkwave dump.vcd
+
+- Synthesis Instructions (Yosys)
+yosys
+read_verilog mult2.v
+synth -top mult2
+write_verilog synth/mult2_syn.v
+
+## Similarly for 8-bit multiplier:
+
+<img width="959" height="286" alt="mult8 op" src="https://github.com/user-attachments/assets/5f118f75-4424-4526-a989-a672ca2a2122" />
