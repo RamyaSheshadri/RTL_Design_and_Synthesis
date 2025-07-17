@@ -687,16 +687,95 @@ Below is a synthesized summary of the resource usage for the `mult2` (2-bit × 2
 
 ###  Explanation of Key Metrics
 
-| Term | Meaning |
-|------|---------|
-| **Wires** | These are named connections in the design (like `a`, `b`, `out`) used to carry signals. |
-| **Wire bits** | Total individual signal bits. `a[1:0]` counts as 2 bits. |
-| **Public Wires** | Wires that are exposed at the module level (inputs/outputs). |
-| **Public Wire Bits** | Total bits in all input/output ports. |
-| **Memories** | No memories (like arrays or RAMs) are used in either design. |
-| **Processes** | No behavioral blocks (`always`, etc.) are used in this structural RTL. |
-| **Cells** | Basic building blocks used in synthesized hardware (like gates or operators). |
-| **$mul** | Represents a multiplication cell instantiated by Yosys for `*` operator. |
+You've written two multiplier modules:
+
+* `mult2`: Multiplies two **2-bit numbers**
+* `mult8`: Multiplies two **8-bit numbers**
+
+Then you ran them through **Yosys**, which checks:
+
+* How many **signals**, **wires**, and **hardware blocks** your design needs.
+* What kind of operations (like `+`, `*`, etc.) are being used.
+
+Now let’s decode the Yosys stats one by one:
+
+
+###  Number of Wires
+
+* Think of **wires** like roads for electrical signals.
+* Both designs have 3 wires:
+
+  * `input a`, `input b`, and `output y`.
+
+ **Why same for both?**
+Because even though bit-widths differ, the number of variables (inputs/outputs) is still 3.
+
+
+###  Number of Wire Bits
+
+* A **wire bit** is like one lane in the road.
+* For example:
+
+  * `a[1:0]` has 2 bits → 2 lanes
+  * `b[1:0]` has 2 bits → 2 lanes
+  * `out[3:0]` has 4 bits → 4 lanes
+    → Total: **2 + 2 + 4 = 8 bits** for `mult2`
+
+  For `mult8`:
+
+  * `a[7:0]` → 8 bits
+  * `b[7:0]` → 8 bits
+  * `out[15:0]` → 16 bits
+    → Total: **8 + 8 + 16 = 32 bits**
+
+**Why different?**
+Because the numbers are **bigger** and need **more bits** to be represented.
+
+---
+
+###  Public Wires and Bits
+
+* These are just **input/output wires** that your module exposes outside.
+* Same values as above because you didn't create any internal temporary wires.
+
+---
+
+### Number of Memories and Memory Bits
+
+* You didn’t use any RAM or arrays. Just pure math (`*`).
+  ✅ So it's **0** for both.
+
+---
+
+### Number of Processes
+
+* A **process** in Verilog means `always` blocks (used for clocked or conditional logic).
+* Since your design is purely combinational (`assign out = a * b;`), Yosys reports **0** processes.
+
+---
+
+### Number of Cells
+
+* A **cell** is like a basic hardware building block (e.g., AND gate, adder, multiplier).
+* Both designs used:
+
+  * **1 `$mul` cell** → Yosys inferred the multiplication and created a hardware block for it.
+
+Even though `mult8` is bigger, it still counts as **1 multiplier cell** (just a larger one under the hood).
+
+---
+
+
+### So What Does This Tell You?
+
+* Your code is **clean** and synthesizable.
+* Yosys correctly detected and synthesized the `*` operator as a **multiplier cell**.
+* Bit-width scaling affects only wire bits, not the number of wires or cells.
+* This is an example of **pure combinational logic**, no clocks, no memories.
+
+---
+
+Let me know if you want the next step — comparing area/delay using `.lib`, or rewriting the multiplier *without* using `*` operator (just add & shift!) 🛠️
 
 ---
 
