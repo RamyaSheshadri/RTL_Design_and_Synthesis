@@ -813,7 +813,14 @@ Let me know if you want the next step — comparing area/delay using `.lib`, or 
   * Flattened logic
   * Reduced gate count
   * Only essential cells & wires
-
+### Command used for this:
+'''
+yosys> read_verilog mult8.v
+hierarchy -top mult8
+prep -top mult8
+proc; opt_clean
+show
+'''
 ## Mult2 simplified version:
  
   <img width="418" height="295" alt="yosys mult2 simplified" src="https://github.com/user-attachments/assets/ba9cfeec-5e8d-4ed2-950b-cbb398428cd7" />
