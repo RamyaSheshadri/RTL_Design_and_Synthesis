@@ -370,7 +370,7 @@ This session involved **manual parsing** of a standard cell liberty file —
 specifically `sky130_fd_sc_hd__tt_025C_1v80.lib` — to extract **setup** and **hold** timing constraints for the flip-flop cell `sky130_fd_sc_hd__dfxtp_1`.
 
 
-## 🔍 What Was Extracted?
+## What Was Extracted?
 
 We focused on **timing arcs** for the output pin `"Q"`:
 - **Setup Time (`setup_rising`)**
@@ -528,8 +528,7 @@ Y = ~(rst + ~d)
 
 ---
 
-## TL;DR: WHY NOR2B?
-
+## WHY NOR2B?
 **Because we don’t have a flip-flop that supports synchronous reset directly in the library.**
 - So, we build the reset logic externally — combine `rst` and `d` into a single input to the DFF.
 - The NOR2B cell **performs exactly the same logic as your Verilog conditional statement** — in real gates.
@@ -545,7 +544,7 @@ Y = ~(rst + ~d)
 
 ---
 
-### 🧠 What Your Async Verilog Code Says:
+### What Your Async Verilog Code Says:
 
 ```verilog
 module dff_async (
@@ -569,7 +568,7 @@ That’s **asynchronous reset** — **`rst` bypasses the clock**.
 
 ---
 
-### 🔧 Now, What Yosys Did with Std Cells (In Your Dot Image):
+### Now, What Yosys Did with Std Cells (In Your Dot Image):
 
 #### Cell 1: `sky130_fd_sc_hd__dfrtp_1`
 
@@ -743,7 +742,7 @@ Because the numbers are **bigger** and need **more bits** to be represented.
 ### Number of Memories and Memory Bits
 
 * You didn’t use any RAM or arrays. Just pure math (`*`).
-  ✅ So it's **0** for both.
+  So it's **0** for both.
 
 ---
 
@@ -814,13 +813,13 @@ Let me know if you want the next step — comparing area/delay using `.lib`, or 
   * Reduced gate count
   * Only essential cells & wires
 ### Command used for this:
-'''
+```txt
 yosys> read_verilog mult8.v
 hierarchy -top mult8
 prep -top mult8
 proc; opt_clean
 show
-'''
+```
 ## Mult2 simplified version:
  
   <img width="418" height="295" alt="yosys mult2 simplified" src="https://github.com/user-attachments/assets/ba9cfeec-5e8d-4ed2-950b-cbb398428cd7" />
